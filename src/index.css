@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-serif-editorial: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+
+  html.dark h1,
+  html.dark h2,
+  html.dark h3,
+  html.dark .font-display,
+  html.dark .font-editorial {
+    font-family: var(--font-display);
+    letter-spacing: 0.005em;
+  }
+
+  .font-editorial {
+    font-family: var(--font-serif-editorial);
+  }
+}
+
+.protected-media {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@media print {
+  .protected-media,
+  canvas {
+    display: none !important;
+  }
+}
