@@ -1,0 +1,6 @@
+{
+  "name": "Mobile Studio",
+  "description": "Kuratierte Portraitfotografie und Video-Portraits von Mobile Studio by Martin. Geschützte Galerieansicht für Indoor- und Outdoor-Portraits.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
