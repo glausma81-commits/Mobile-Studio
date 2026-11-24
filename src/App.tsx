@@ -568,7 +568,7 @@ export default function App() {
                       className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-[#9F3A58] focus:ring-[#9F3A58] dark:border-zinc-700 dark:bg-zinc-800 cursor-pointer"
                     />
                     <label htmlFor="contactConsent" className="text-xs text-zinc-600 dark:text-zinc-400 cursor-pointer select-none">
-                      Ich willige ein, dass meine Daten zur Kontaktaufnahme und Beantwortung meiner Anfrage verarbeitet werden. Sehen Sie dazu auch meine{' '}.
+                      Ich willige ein, dass meine Daten zur Kontaktaufnahme und Beantwortung meiner Anfrage verarbeitet werden. Sehen Sie dazu auch meine{' '}
                        <a 
     href="/privacy-policy.pdf" 
     target="_blank" 
