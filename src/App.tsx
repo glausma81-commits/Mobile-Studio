@@ -157,6 +157,7 @@ export default function App() {
       setContactPeopleCount('');
       setContactReferral('');
       setContactMessage('');
+      setContactConsent(false);
     } catch {
       setContactFeedback({
         type: 'error',
