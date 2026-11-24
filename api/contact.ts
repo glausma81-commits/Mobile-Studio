@@ -48,7 +48,7 @@ export async function POST(request: Request): Promise<Response> {
   // 3. E-Mail im Hintergrund an Sie weiterleiten
   try {
     // HINWEIS: Ersetzen Sie 'Ihre-Email@beispiel.ch' durch Ihre echte E-Mail-Adresse!
-    const MY_EMAIL = 'Ihre-Email@beispiel.ch';
+    const MY_EMAIL = 'glausma81@gmail.com';
     await fetch(`https://formsubmit.co/ajax/${MY_EMAIL}`, {
       method: 'POST',
       headers: {
