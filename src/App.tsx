@@ -60,44 +60,42 @@ export default function App() {
 
   const [activeServiceInfo, setActiveServiceInfo] = useState<ServiceItem | null>(null);
 
-    // Preiskalkulator-Zustand & Optionen
-  const [calcSelected, setCalcSelected] = useState<string[]>([]);
-  const calcOptions = [
-    {
-      id: 'indoor-2h',
-      title: 'Indoor Portraits 2 h',
-      price: 350,
-      desc: 'Kompaktes Studio-Shooting, ideal für Einzelportraits oder Business-Profile.',
-    },
-    {
-      id: 'indoor-4h',
-      title: 'Indoor Portraits 4 h',
-      price: 650,
-      desc: 'Ausführliche Session mit Outfit- und Licht-Wechseln für facettenreiche Bilder.',
-    },
-    {
-      id: 'indoor-8h',
-      title: 'Indoor Portraits 8 h',
-      price: 1200,
-      desc: 'Ganztages-Shooting, maximale Ruhe & Kreativität, mehrere Sets & Looks.',
-    },
-  ];
-  const calcTotal = calcOptions
-    .filter((opt) => calcSelected.includes(opt.id))
-    .reduce((sum, opt) => sum + opt.price, 0);
-  const toggleCalcOption = (id: string) => {
-    setCalcSelected((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+      // Preiskalkulator-Zustand & Optionen
+  const [calcLocation, setCalcLocation] = useState<'indoor' | 'outdoor'>('indoor');
+  const [calcDuration, setCalcDuration] = useState<number>(4); // Standard: 4h
+  const [calcPeople, setCalcPeople] = useState<number>(1);
+  // Preisgestaltung (können Sie hier beliebig anpassen)
+  const EXTRA_PERSON_PRICE = 90; // CHF pro weitere Person ab 4h
+  const packagePrices: Record<string, number> = {
+    'indoor-2': 350,
+    'indoor-4': 650,
+    'indoor-8': 1200,
+    'outdoor-4': 690,
+    'outdoor-8': 1290,
+  };
+  const selectedKey = `${calcLocation}-${calcDuration}`;
+  const basePrice = packagePrices[selectedKey] || 650;
+  
+  // Zusatzpreis für weitere Personen (nur ab 4h)
+  const additionalPeople = calcDuration >= 4 ? Math.max(0, calcPeople - 1) : 0;
+  const extraPeoplePrice = additionalPeople * EXTRA_PERSON_PRICE;
+  const calcTotal = basePrice + extraPeoplePrice;
+  // Wenn auf 2h gewechselt wird, Personen automatisch auf 1 setzen
+  const handleDurationChange = (hours: number) => {
+    setCalcDuration(hours);
+    if (hours < 4) {
+      setCalcPeople(1);
+    }
   };
   const applyCalcToContact = () => {
-    const selectedNames = calcOptions
-      .filter((opt) => calcSelected.includes(opt.id))
-      .map((opt) => `${opt.title} (CHF ${opt.price}.–)`)
-      .join(', ');
-    setContactCategory('Indoorportrait');
+    const locName = calcLocation === 'indoor' ? 'Indoor-Portraits' : 'Outdoor-Portraits';
+    const detailText = `Paket: ${locName} (${calcDuration} Stunden)\nPersonen: ${calcPeople} Person(en)${
+      additionalPeople > 0 ? ` (inkl. ${additionalPeople} Zusatzperson(en) à CHF ${EXTRA_PERSON_PRICE}.–)` : ''
+    }\nGeschätzter Richtpreis: CHF ${calcTotal.toLocaleString('de-CH')}.–`;
+    setContactCategory(calcLocation === 'indoor' ? 'Indoorportrait' : 'Outdoor-Portraits');
+    setContactPeopleCount(String(calcPeople));
     setContactMessage(
-      `Hallo, ich interessiere mich für folgende Pakete aus dem Preiskalkulator:\n- ${selectedNames}\n\nGeschätzter Richtpreis: CHF ${calcTotal.toLocaleString('de-CH')}.–\n\n`
+      `Hallo, ich interessiere mich für folgendes Angebot aus dem Preiskalkulator:\n\n${detailText}\n\n`
     );
     handleNavigateSection('kontakt');
   };
