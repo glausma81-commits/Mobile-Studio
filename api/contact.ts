@@ -1,3 +1,4 @@
+import nodemailer from 'nodemailer';
 export async function POST(request: Request): Promise<Response> {
   let body: {
     name?: unknown;
@@ -25,7 +26,7 @@ export async function POST(request: Request): Promise<Response> {
   const referral = typeof body?.referral === 'string' ? body.referral.trim() : '';
   const message = typeof body?.message === 'string' ? body.message.trim() : '';
   const consent = Boolean(body?.consent);
-  // 1. Prüfung der Pflichtfelder
+  // 1. Validierung
   if (name.length < 2 || !email.includes('@') || message.length < 10) {
     return Response.json(
       {
@@ -35,7 +36,6 @@ export async function POST(request: Request): Promise<Response> {
       { status: 400 }
     );
   }
-  // 2. Prüfung der Datenschutz-Checkbox
   if (!consent) {
     return Response.json(
       {
@@ -45,29 +45,39 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
   const reference = `MS-${Date.now().toString().slice(-6)}`;
-  // 3. E-Mail im Hintergrund an Sie weiterleiten
+  // 2. E-Mail über Gmail SMTP (App-Passwort) versenden
   try {
-    // HINWEIS: Ersetzen Sie 'Ihre-Email@beispiel.ch' durch Ihre echte E-Mail-Adresse!
-    const MY_EMAIL = 'glausma81@gmail.com';
-    await fetch(`https://formsubmit.co/ajax/${MY_EMAIL}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
       },
-      body: JSON.stringify({
-        _subject: `Neue Website-Anfrage (Ref: ${reference}) von ${name}`,
-        Name: name,
-        Email: email,
-        Telefon: phone || 'Keine Angabe',
-        Kategorie: category || 'Allgemein',
-        Personen: peopleCount || 'Keine Angabe',
-        Woher: referral || 'Keine Angabe',
-        Nachricht: message,
-      }),
+    });
+    const mailText = `Neue Kontaktanfrage über Ihre Website:
+Referenz: ${reference}
+Name: ${name}
+E-Mail: ${email}
+Telefon: ${phone || 'Keine Angabe'}
+Personenanzahl: ${peopleCount || 'Keine Angabe'}
+Kategorie: ${category || 'Allgemein'}
+Empfehlung: ${referral || 'Keine Angabe'}
+Nachricht:
+${message}
+`;
+    await transporter.sendMail({
+      from: `"Website Kontaktformular" <${process.env.GMAIL_USER}>`,
+      to: process.env.GMAIL_USER,
+      replyTo: email, // Wenn Sie in Gmail auf "Antworten" klicken, antworten Sie direkt dem Kunden!
+      subject: `Neue Anfrage (Ref: ${reference}) von ${name}`,
+      text: mailText,
     });
   } catch (err) {
-    console.error('Fehler beim E-Mail-Versand:', err);
+    console.error('Fehler beim E-Mail-Versand via Gmail:', err);
+    return Response.json(
+      { error: 'E-Mail konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.' },
+      { status: 500 }
+    );
   }
   return Response.json(
     {
