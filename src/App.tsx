@@ -68,6 +68,7 @@ export default function App() {
   const [contactCategory, setContactCategory] = useState('Indoorportrait');
   const [contactReferral, setContactReferral] = useState('');
   const [contactMessage, setContactMessage] = useState('');
+  const [contactConsent, setContactConsent] = useState(false);
   const [contactSubmitting, setContactSubmitting] = useState(false);
   const [contactFeedback, setContactFeedback] = useState<{
     type: 'success' | 'error';
