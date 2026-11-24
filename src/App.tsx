@@ -440,6 +440,82 @@ export default function App() {
                   </div>
                 ))}
               </div>
+                            {/* Preiskalkulator Box */}
+              <div className="mt-8 rounded-2xl border border-[#EDD6DC] bg-[#FFFDFD] p-7 dark:border-zinc-800 dark:bg-[#1C1C20] shadow-sm">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[#EDD6DC] dark:border-zinc-800 pb-6">
+                  <div>
+                    <span className="text-xs font-semibold tracking-wider uppercase text-[#9F3A58] dark:text-[#D9859B]">
+                      Interaktive Preisübersicht
+                    </span>
+                    <h3 className="mt-1 font-display text-2xl font-semibold tracking-tight text-black dark:text-[#D9859B]">
+                      Preiskalkulator
+                    </h3>
+                    <p className="mt-1 text-xs font-medium italic text-black/80 dark:text-[#B96C80]">
+                      Wählen Sie Ihre gewünschten Leistungen aus, um unverbindlich einen Richtpreis zu kalkulieren.
+                    </p>
+                  </div>
+                  {/* Richtpreis Anzeige */}
+                  <div className="flex items-baseline gap-2 rounded-xl border border-[#E3C4CC] bg-[#F9EEF1] px-5 py-3 dark:border-zinc-700 dark:bg-zinc-900">
+                    <span className="text-xs font-medium text-black/70 dark:text-zinc-400">Richtpreis:</span>
+                    <span className="text-2xl font-bold font-display text-[#9F3A58] dark:text-[#D9859B]">
+                      CHF {calcTotal.toLocaleString('de-CH')}.–
+                    </span>
+                  </div>
+                </div>
+                {/* Checkbox Optionen */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6">
+                  {calcOptions.map((opt) => {
+                    const isChecked = calcSelected.includes(opt.id);
+                    return (
+                      <label
+                        key={opt.id}
+                        onClick={() => toggleCalcOption(opt.id)}
+                        className={`flex flex-col justify-between p-5 rounded-xl border-2 transition-all cursor-pointer select-none ${
+                          isChecked
+                            ? 'border-[#9F3A58] bg-[#F9EEF1]/70 dark:border-[#D9859B] dark:bg-[#9F3A58]/20'
+                            : 'border-[#EDD6DC] hover:border-[#D4A7B3] bg-white dark:border-zinc-800 dark:bg-[#161619]'
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">
+                              {opt.title}
+                            </span>
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => {}} // gesteuert über label-click
+                              className="h-4 w-4 rounded border-zinc-300 text-[#9F3A58] focus:ring-[#9F3A58] cursor-pointer"
+                            />
+                          </div>
+                          <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389] leading-relaxed">
+                            {opt.desc}
+                          </p>
+                        </div>
+                        <div className="mt-5 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800/80">
+                          <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">
+                            CHF {opt.price}.–
+                          </span>
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+                {/* Fußbereich mit Anfrage-Button */}
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#EDD6DC] dark:border-zinc-800">
+                  <span className="text-xs italic text-black/60 dark:text-[#B96C80] text-center sm:text-left">
+                    * Alle Preise verstehen sich als unverbindliche Richtpreise inklusive digitaler Bildübergabe.
+                  </span>
+                  <button
+                    type="button"
+                    onClick={applyCalcToContact}
+                    disabled={calcTotal === 0}
+                    className="w-full sm:w-auto inline-flex min-h-11 items-center justify-center rounded-lg bg-[#9F3A58] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#882F4A] disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer shadow-sm dark:bg-zinc-100 dark:text-[#7D2B43] dark:hover:bg-white"
+                  >
+                    Auswahl im Kontaktformular anfragen →
+                  </button>
+                </div>
+              </div>
             </div>
           </section>
 
