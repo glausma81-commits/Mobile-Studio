@@ -570,7 +570,7 @@ export default function App() {
                     <label htmlFor="contactConsent" className="text-xs text-zinc-600 dark:text-zinc-400 cursor-pointer select-none">
                       Ich willige ein, dass meine Daten zur Kontaktaufnahme und Beantwortung meiner Anfrage verarbeitet werden. Sehen Sie dazu auch meine{' '}
                        <a 
-    href="/privacy-policy.pdf" 
+    href="/Datenschutzbestimmungen Mobile Studio Fotografie.pdf" 
     target="_blank" 
     rel="noopener noreferrer" 
     className="underline hover:text-[#9F3A58]"
