@@ -60,6 +60,48 @@ export default function App() {
 
   const [activeServiceInfo, setActiveServiceInfo] = useState<ServiceItem | null>(null);
 
+    // Preiskalkulator-Zustand & Optionen
+  const [calcSelected, setCalcSelected] = useState<string[]>([]);
+  const calcOptions = [
+    {
+      id: 'indoor-2h',
+      title: 'Indoor Portraits 2 h',
+      price: 350,
+      desc: 'Kompaktes Studio-Shooting, ideal für Einzelportraits oder Business-Profile.',
+    },
+    {
+      id: 'indoor-4h',
+      title: 'Indoor Portraits 4 h',
+      price: 650,
+      desc: 'Ausführliche Session mit Outfit- und Licht-Wechseln für facettenreiche Bilder.',
+    },
+    {
+      id: 'indoor-8h',
+      title: 'Indoor Portraits 8 h',
+      price: 1200,
+      desc: 'Ganztages-Shooting, maximale Ruhe & Kreativität, mehrere Sets & Looks.',
+    },
+  ];
+  const calcTotal = calcOptions
+    .filter((opt) => calcSelected.includes(opt.id))
+    .reduce((sum, opt) => sum + opt.price, 0);
+  const toggleCalcOption = (id: string) => {
+    setCalcSelected((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+  const applyCalcToContact = () => {
+    const selectedNames = calcOptions
+      .filter((opt) => calcSelected.includes(opt.id))
+      .map((opt) => `${opt.title} (CHF ${opt.price}.–)`)
+      .join(', ');
+    setContactCategory('Indoorportrait');
+    setContactMessage(
+      `Hallo, ich interessiere mich für folgende Pakete aus dem Preiskalkulator:\n- ${selectedNames}\n\nGeschätzter Richtpreis: CHF ${calcTotal.toLocaleString('de-CH')}.–\n\n`
+    );
+    handleNavigateSection('kontakt');
+  };
+
   // Contact form state
   const [contactName, setContactName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
