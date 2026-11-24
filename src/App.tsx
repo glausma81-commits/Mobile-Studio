@@ -130,6 +130,7 @@ export default function App() {
           category: contactCategory,
           referral: contactReferral,
           message: contactMessage,
+          consent: contactConsent,
         }),
       });
       const data = (await response.json()) as {
