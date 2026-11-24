@@ -440,84 +440,197 @@ export default function App() {
                   </div>
                 ))}
               </div>
-                            {/* Preiskalkulator Box */}
+                                       {/* Preiskalkulator Box */}
               <div className="mt-8 rounded-2xl border border-[#EDD6DC] bg-[#FFFDFD] p-7 dark:border-zinc-800 dark:bg-[#1C1C20] shadow-sm">
+                
+                {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[#EDD6DC] dark:border-zinc-800 pb-6">
                   <div>
                     <span className="text-xs font-semibold tracking-wider uppercase text-[#9F3A58] dark:text-[#D9859B]">
-                      Interaktive Preisübersicht
+                      Individuelle Kalkulation
                     </span>
                     <h3 className="mt-1 font-display text-2xl font-semibold tracking-tight text-black dark:text-[#D9859B]">
                       Preiskalkulator
                     </h3>
                     <p className="mt-1 text-xs font-medium italic text-black/80 dark:text-[#B96C80]">
-                      Wählen Sie Ihre gewünschten Leistungen aus, um unverbindlich einen Richtpreis zu kalkulieren.
+                      Wählen Sie Location, Dauer und Personenanzahl für eine transparente Richtpreis-Schätzung.
                     </p>
                   </div>
                   {/* Richtpreis Anzeige */}
                   <div className="flex items-baseline gap-2 rounded-xl border border-[#E3C4CC] bg-[#F9EEF1] px-5 py-3 dark:border-zinc-700 dark:bg-zinc-900">
-                    <span className="text-xs font-medium text-black/70 dark:text-zinc-400">Richtpreis:</span>
+                    <span className="text-xs font-medium text-black/70 dark:text-zinc-400">Geschätzter Richtpreis:</span>
                     <span className="text-2xl font-bold font-display text-[#9F3A58] dark:text-[#D9859B]">
                       CHF {calcTotal.toLocaleString('de-CH')}.–
                     </span>
                   </div>
                 </div>
-                {/* Checkbox Optionen */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6">
-                  {calcOptions.map((opt) => {
-                    const isChecked = calcSelected.includes(opt.id);
-                    return (
-                      <label
-                        key={opt.id}
-                        onClick={() => toggleCalcOption(opt.id)}
+                {/* 1. Location Umschalter */}
+                <div className="mt-6">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-black/70 dark:text-[#B96C80]">
+                    1. Location wählen
+                  </span>
+                  <div className="grid grid-cols-2 gap-4 mt-2 max-w-md">
+                    <button
+                      type="button"
+                      onClick={() => setCalcLocation('indoor')}
+                      className={`py-3 px-4 rounded-xl border-2 font-display text-sm font-semibold transition-all cursor-pointer ${
+                        calcLocation === 'indoor'
+                          ? 'border-[#9F3A58] bg-[#F9EEF1] text-black dark:border-[#D9859B] dark:bg-[#9F3A58]/20 dark:text-[#D9859B]'
+                          : 'border-[#EDD6DC] bg-white text-black/70 hover:border-[#D4A7B3] dark:border-zinc-800 dark:bg-[#161619] dark:text-zinc-300'
+                      }`}
+                    >
+                      Studio / Indoor
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCalcLocation('outdoor');
+                        if (calcDuration < 4) setCalcDuration(4); // Outdoor startet ab 4h
+                      }}
+                      className={`py-3 px-4 rounded-xl border-2 font-display text-sm font-semibold transition-all cursor-pointer ${
+                        calcLocation === 'outdoor'
+                          ? 'border-[#9F3A58] bg-[#F9EEF1] text-black dark:border-[#D9859B] dark:bg-[#9F3A58]/20 dark:text-[#D9859B]'
+                          : 'border-[#EDD6DC] bg-white text-black/70 hover:border-[#D4A7B3] dark:border-zinc-800 dark:bg-[#161619] dark:text-zinc-300'
+                      }`}
+                    >
+                      Outdoor / On-Location
+                    </button>
+                  </div>
+                </div>
+                {/* 2. Dauer Auswählen */}
+                <div className="mt-6">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-black/70 dark:text-[#B96C80]">
+                    2. Zeitrahmen wählen
+                  </span>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                    {/* 2h Option (nur bei Indoor aktiv) */}
+                    {calcLocation === 'indoor' ? (
+                      <div
+                        onClick={() => handleDurationChange(2)}
                         className={`flex flex-col justify-between p-5 rounded-xl border-2 transition-all cursor-pointer select-none ${
-                          isChecked
+                          calcDuration === 2
                             ? 'border-[#9F3A58] bg-[#F9EEF1]/70 dark:border-[#D9859B] dark:bg-[#9F3A58]/20'
                             : 'border-[#EDD6DC] hover:border-[#D4A7B3] bg-white dark:border-zinc-800 dark:bg-[#161619]'
                         }`}
                       >
                         <div>
                           <div className="flex items-center justify-between">
-                            <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">
-                              {opt.title}
-                            </span>
-                            <input
-                              type="checkbox"
-                              checked={isChecked}
-                              onChange={() => {}} // gesteuert über label-click
-                              className="h-4 w-4 rounded border-zinc-300 text-[#9F3A58] focus:ring-[#9F3A58] cursor-pointer"
-                            />
+                            <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">2 Stunden</span>
+                            <span className="text-xs px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">1 Person</span>
                           </div>
-                          <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389] leading-relaxed">
-                            {opt.desc}
+                          <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
+                            Kompaktes Portrait-Shooting, ideal für Einzelpersonen.
                           </p>
                         </div>
-                        <div className="mt-5 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800/80">
-                          <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">
-                            CHF {opt.price}.–
-                          </span>
+                        <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800">
+                          <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">CHF {packagePrices['indoor-2']}.–</span>
                         </div>
-                      </label>
-                    );
-                  })}
+                      </div>
+                    ) : (
+                      <div className="p-5 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 flex flex-col justify-center items-center text-center">
+                        <span className="text-xs font-medium text-zinc-400">Outdoor ab 4 Stunden möglich</span>
+                        <p className="text-[11px] text-zinc-400 mt-1">Für optimale Flexibilität bei Licht & Location-Wechseln.</p>
+                      </div>
+                    )}
+                    {/* 4h Option */}
+                    <div
+                      onClick={() => handleDurationChange(4)}
+                      className={`flex flex-col justify-between p-5 rounded-xl border-2 transition-all cursor-pointer select-none ${
+                        calcDuration === 4
+                          ? 'border-[#9F3A58] bg-[#F9EEF1]/70 dark:border-[#D9859B] dark:bg-[#9F3A58]/20'
+                          : 'border-[#EDD6DC] hover:border-[#D4A7B3] bg-white dark:border-zinc-800 dark:bg-[#161619]'
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">4 Stunden</span>
+                          <span className="text-xs px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-medium">Mehrpersonen mgl.</span>
+                        </div>
+                        <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
+                          Ausführliche Session mit Outfit- & Set-Wechseln. Mehrere Personen möglich.
+                        </p>
+                      </div>
+                      <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800">
+                        <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">
+                          CHF {packagePrices[`${calcLocation}-4`]}.–
+                        </span>
+                      </div>
+                    </div>
+                    {/* 8h Option */}
+                    <div
+                      onClick={() => handleDurationChange(8)}
+                      className={`flex flex-col justify-between p-5 rounded-xl border-2 transition-all cursor-pointer select-none ${
+                        calcDuration === 8
+                          ? 'border-[#9F3A58] bg-[#F9EEF1]/70 dark:border-[#D9859B] dark:bg-[#9F3A58]/20'
+                          : 'border-[#EDD6DC] hover:border-[#D4A7B3] bg-white dark:border-zinc-800 dark:bg-[#161619]'
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">8 Stunden</span>
+                          <span className="text-xs px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-medium">Ganztages-Session</span>
+                        </div>
+                        <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
+                          Volle kreative Freiheit für Teams oder umfangreiche Einzel-Serien.
+                        </p>
+                      </div>
+                      <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800">
+                        <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">
+                          CHF {packagePrices[`${calcLocation}-8`]}.–
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                {/* Fußbereich mit Anfrage-Button */}
+                {/* 3. Personenanzahl (Interaktiver Zähler) */}
+                <div className="mt-8 pt-6 border-t border-[#EDD6DC] dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-black/70 dark:text-[#B96C80]">
+                      3. Anzahl teilnehmende Personen
+                    </span>
+                    <p className="text-xs italic text-black/60 dark:text-[#B96C80] mt-0.5">
+                      {calcDuration >= 4
+                        ? `1 Person inklusive. Jede weitere Person + CHF ${EXTRA_PERSON_PRICE}.– (Anfahrt & Grundequipment fallen nur einmalig an).`
+                        : 'Bei 2-Stunden-Shootings auf 1 Person fokussiert (Gruppen ab 4 Stunden buchbar).'}
+                    </p>
+                  </div>
+                  {/* Plus/Minus Zähler */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      disabled={calcPeople <= 1 || calcDuration < 4}
+                      onClick={() => setCalcPeople((p) => Math.max(1, p - 1))}
+                      className="h-10 w-10 rounded-lg border border-[#EDD6DC] bg-white dark:border-zinc-700 dark:bg-zinc-800 flex items-center justify-center font-bold text-lg text-black dark:text-zinc-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                    >
+                      −
+                    </button>
+                    <span className="w-12 text-center font-display text-lg font-bold text-black dark:text-[#D9859B]">
+                      {calcPeople}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={calcDuration < 4 || calcPeople >= 8}
+                      onClick={() => setCalcPeople((p) => p + 1)}
+                      className="h-10 w-10 rounded-lg border border-[#EDD6DC] bg-white dark:border-zinc-700 dark:bg-zinc-800 flex items-center justify-center font-bold text-lg text-black dark:text-zinc-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                {/* Footer mit Anfrage-Button */}
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#EDD6DC] dark:border-zinc-800">
                   <span className="text-xs italic text-black/60 dark:text-[#B96C80] text-center sm:text-left">
-                    * Alle Preise verstehen sich als unverbindliche Richtpreise inklusive digitaler Bildübergabe.
+                    * Unverbindliche Richtpreis-Schätzung inkl. digitaler Bildabgabe & Vorbesprechung.
                   </span>
                   <button
                     type="button"
                     onClick={applyCalcToContact}
-                    disabled={calcTotal === 0}
-                    className="w-full sm:w-auto inline-flex min-h-11 items-center justify-center rounded-lg bg-[#9F3A58] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#882F4A] disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer shadow-sm dark:bg-zinc-100 dark:text-[#7D2B43] dark:hover:bg-white"
+                    className="w-full sm:w-auto inline-flex min-h-11 items-center justify-center rounded-lg bg-[#9F3A58] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#882F4A] cursor-pointer shadow-sm dark:bg-zinc-100 dark:text-[#7D2B43] dark:hover:bg-white"
                   >
-                    Auswahl im Kontaktformular anfragen →
+                    Auswahl ins Kontaktformular übernehmen →
                   </button>
                 </div>
               </div>
-            </div>
-          </section>
 
           {/* Contact / Booking Inquiry */}
           <section id="kontakt" className="border-t border-[#EDD6DC] dark:border-zinc-800 mx-auto max-w-[1320px] px-6 py-16 lg:px-10 lg:py-24">
