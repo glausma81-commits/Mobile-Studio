@@ -257,7 +257,26 @@ export default function App() {
                     <p className="text-xs font-medium tracking-wide text-black dark:text-[#B96C80]">
                       Portraitfotografie &amp; Video-Portraits · Zug, Zürich &amp; ganze Schweiz
                     </p>
-                    <ThemeToggle theme={theme} onToggle={setTheme} />
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                    <p className="text-xs font-medium tracking-wide text-black dark:text-[#B96C80]">
+                      Portraitfotografie &amp; Video-Portraits · Zug, Zürich &amp; ganze Schweiz
+                    </p>
+                    
+                    {/* Knöpfe für Sprache & Darkmode */}
+                    <div className="flex items-center gap-2.5">
+                      <button
+                        type="button"
+                        onClick={() => setLang(lang === 'de' ? 'en' : 'de')}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-[#E3C4CC] bg-[#F9EEF1] px-2.5 py-1.5 text-xs font-semibold text-black transition-colors hover:bg-[#F3DFE5] dark:border-zinc-700 dark:bg-zinc-900 dark:text-[#D9859B] cursor-pointer select-none"
+                        title={lang === 'de' ? 'Switch to English' : 'Auf Deutsch umschalten'}
+                      >
+                        <span className={lang === 'de' ? 'font-bold underline text-[#9F3A58] dark:text-[#D9859B]' : 'opacity-50'}>DE</span>
+                        <span className="opacity-30">|</span>
+                        <span className={lang === 'en' ? 'font-bold underline text-[#9F3A58] dark:text-[#D9859B]' : 'opacity-50'}>EN</span>
+                      </button>
+                      <ThemeToggle theme={theme} onToggle={setTheme} />
+                    </div>
+                  </div>
                   </div>
                   <h1 className="mt-5 max-w-xl font-display text-4xl font-semibold tracking-[-0.01em] text-black dark:text-[#D9859B] leading-[1.06] sm:text-5xl lg:text-[4rem] [text-wrap:balance]">
                     Präzise Portraits voller Ausdruck und Schärfe.
