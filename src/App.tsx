@@ -126,11 +126,15 @@ export default function App() {
   const [contactPhone, setContactPhone] = useState('');
   const [contactPeopleCount, setContactPeopleCount] = useState('');
   const [contactCategories, setContactCategories] = useState<string[]>(['Indoorportrait']);
-const toggleCategory = (cat: string) => {
-  setContactCategories((prev) =>
-    prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
-  );
-};  
+  const toggleContactCategory = (cat: string) => {
+    setContactCategories((prev) =>
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+    );
+  };
+  // Hält bestehende Aufrufe (z.B. aus Modals) voll kompatibel
+  const setContactCategory = (cat: string) => {
+    setContactCategories([cat]);
+  };
   const [contactReferral, setContactReferral] = useState('');
   const [contactMessage, setContactMessage] = useState('');
   const [contactConsent, setContactConsent] = useState(false);
