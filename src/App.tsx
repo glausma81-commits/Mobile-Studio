@@ -458,27 +458,41 @@ export default function App() {
                   </div>
                 ))}
               </div>
-              {/* Preiskalkulator Box */}
+
+                            {/* Preiskalkulator Box */}
               <div className="mt-8 rounded-2xl border border-[#EDD6DC] bg-[#FFFDFD] p-7 dark:border-zinc-800 dark:bg-[#1C1C20] shadow-sm">
                 
-                {/* Header */}
+                {/* Header mit Rabatt-Anzeige */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[#EDD6DC] dark:border-zinc-800 pb-6">
                   <div>
-                    <span className="text-xs font-semibold tracking-wider uppercase text-[#9F3A58] dark:text-[#D9859B]">
-                      Individuelle Kalkulation
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold tracking-wider uppercase text-[#9F3A58] dark:text-[#D9859B]">
+                        Aktions-Preise
+                      </span>
+                      <span className="rounded-full bg-[#9F3A58] px-2 py-0.5 text-[11px] font-bold text-white">
+                        Bis zu {DISCOUNT_LABELS[8]} Rabatt
+                      </span>
+                    </div>
                     <h3 className="mt-1 font-display text-2xl font-semibold tracking-tight text-black dark:text-[#D9859B]">
                       Preiskalkulator
                     </h3>
                     <p className="mt-1 text-xs font-medium italic text-black/80 dark:text-[#B96C80]">
-                      Wählen Sie Location, Dauer und Personenanzahl für eine transparente Richtpreis-Schätzung.
+                      Wählen Sie Location, Dauer und Personen für Ihren vergünstigten Richtpreis.
                     </p>
                   </div>
-                  {/* Richtpreis Anzeige */}
-                  <div className="flex items-baseline gap-2 rounded-xl border border-[#E3C4CC] bg-[#F9EEF1] px-5 py-3 dark:border-zinc-700 dark:bg-zinc-900">
-                    <span className="text-xs font-medium text-black/70 dark:text-zinc-400">Geschätzter Richtpreis:</span>
+                  {/* Richtpreis Anzeige (Normalpreis durchgestrichen + Aktionspreis) */}
+                  <div className="flex items-center gap-3 rounded-xl border border-[#E3C4CC] bg-[#F9EEF1] px-5 py-3 dark:border-zinc-700 dark:bg-zinc-900">
+                    <div className="flex flex-col items-end">
+                      <span className="text-[11px] text-zinc-500 line-through">
+                        CHF {regularTotal.toLocaleString('de-CH')}.–
+                      </span>
+                      <span className="text-xs font-medium text-black/70 dark:text-zinc-400">Aktionspreis:</span>
+                    </div>
                     <span className="text-2xl font-bold font-display text-[#9F3A58] dark:text-[#D9859B]">
-                      CHF {calcTotal.toLocaleString('de-CH')}.–
+                      CHF {finalTotal.toLocaleString('de-CH')}.–
+                    </span>
+                    <span className="rounded bg-[#9F3A58]/10 dark:bg-[#9F3A58]/30 px-2 py-1 text-xs font-bold text-[#9F3A58] dark:text-[#D9859B]">
+                      {DISCOUNT_LABELS[calcDuration]}
                     </span>
                   </div>
                 </div>
@@ -503,7 +517,7 @@ export default function App() {
                       type="button"
                       onClick={() => {
                         setCalcLocation('outdoor');
-                        if (calcDuration < 4) setCalcDuration(4); // Outdoor startet ab 4 h
+                        if (calcDuration < 4) setCalcDuration(4);
                       }}
                       className={`py-3 px-4 rounded-xl border-2 font-display text-sm font-semibold transition-all cursor-pointer ${
                         calcLocation === 'outdoor'
@@ -515,7 +529,7 @@ export default function App() {
                     </button>
                   </div>
                 </div>
-                {/* 2. Dauer Auswählen (2h, 4h, 6h, 8h) */}
+                {/* 2. Dauer Auswählen mit durchgestrichenen Preisen */}
                 <div className="mt-6">
                   <span className="text-xs font-semibold uppercase tracking-wider text-black/70 dark:text-[#B96C80]">
                     2. Zeitrahmen wählen
@@ -534,14 +548,15 @@ export default function App() {
                         <div>
                           <div className="flex items-center justify-between">
                             <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">2 Stunden</span>
-                            <span className="text-[11px] px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 font-medium">1 Person</span>
+                            <span className="text-[11px] px-2 py-0.5 rounded bg-[#9F3A58]/10 text-[#9F3A58] dark:text-[#D9859B] font-bold">−20%</span>
                           </div>
                           <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
-                            Kompaktes Portrait-Shooting, ideal für Einzelpersonen.
+                            Kompaktes Portrait-Shooting (1 Person).
                           </p>
                         </div>
-                        <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800">
-                          <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">CHF 600.–</span>
+                        <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800 flex items-baseline gap-2">
+                          <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">CHF 480.–</span>
+                          <span className="text-xs text-zinc-400 line-through">CHF 600.–</span>
                         </div>
                       </div>
                     ) : (
@@ -562,17 +577,18 @@ export default function App() {
                       <div>
                         <div className="flex items-center justify-between">
                           <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">4 Stunden</span>
-                          <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-medium">Mehrpersonen mgl.</span>
+                          <span className="text-[11px] px-2 py-0.5 rounded bg-[#9F3A58]/10 text-[#9F3A58] dark:text-[#D9859B] font-bold">−20%</span>
                         </div>
                         <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
                           Ausführliche Session mit Outfit- & Set-Wechseln.
                         </p>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800">
-                        <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">CHF 800.–</span>
+                      <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800 flex items-baseline gap-2">
+                        <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">CHF 640.–</span>
+                        <span className="text-xs text-zinc-400 line-through">CHF 800.–</span>
                       </div>
                     </div>
-                    {/* 6h Option (NEU) */}
+                    {/* 6h Option */}
                     <div
                       onClick={() => handleDurationChange(6)}
                       className={`flex flex-col justify-between p-5 rounded-xl border-2 transition-all cursor-pointer select-none ${
@@ -584,14 +600,15 @@ export default function App() {
                       <div>
                         <div className="flex items-center justify-between">
                           <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">6 Stunden</span>
-                          <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-medium">Erweitert</span>
+                          <span className="text-[11px] px-2 py-0.5 rounded bg-[#9F3A58]/10 text-[#9F3A58] dark:text-[#D9859B] font-bold">−25%</span>
                         </div>
                         <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
-                          Viel Zeit für verschiedene Stile, Looks und kleine Teams.
+                          Viel Zeit für verschiedene Stile, Looks und Teams.
                         </p>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800">
-                        <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">CHF 900.–</span>
+                      <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800 flex items-baseline gap-2">
+                        <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">CHF 675.–</span>
+                        <span className="text-xs text-zinc-400 line-through">CHF 900.–</span>
                       </div>
                     </div>
                     {/* 8h Option */}
@@ -606,19 +623,20 @@ export default function App() {
                       <div>
                         <div className="flex items-center justify-between">
                           <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">8 Stunden</span>
-                          <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-medium">Ganztag</span>
+                          <span className="text-[11px] px-2 py-0.5 rounded bg-[#9F3A58]/10 text-[#9F3A58] dark:text-[#D9859B] font-bold">−26.3%</span>
                         </div>
                         <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
-                          Volle kreative Freiheit für Teams oder umfangreiche Serien.
+                          Ganztages-Session mit voller kreativer Freiheit.
                         </p>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800">
-                        <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">CHF 950.–</span>
+                      <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800 flex items-baseline gap-2">
+                        <span className="font-display text-base font-bold text-black dark:text-[#D9859B]">CHF 700.–</span>
+                        <span className="text-xs text-zinc-400 line-through">CHF 950.–</span>
                       </div>
                     </div>
                   </div>
                 </div>
-                {/* 3. Personenanzahl (Interaktiver Zähler mit degressiver Staffelung) */}
+                {/* 3. Personenanzahl */}
                 <div className="mt-8 pt-6 border-t border-[#EDD6DC] dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>
                     <span className="text-xs font-semibold uppercase tracking-wider text-black/70 dark:text-[#B96C80]">
@@ -627,14 +645,14 @@ export default function App() {
                     <p className="text-xs italic text-black/60 dark:text-[#B96C80] mt-0.5">
                       {calcDuration >= 4 ? (
                         <span>
-                          1 Person inkl. | +1 Pers: <strong>+CHF 100.–</strong> | +2 Pers: <strong>+CHF 175.–</strong> (+75) | +3 Pers: <strong>+CHF 240.–</strong> (+65)
+                          1 Person inkl. | +1 Pers: <strong>+CHF 100.–</strong> | +2 Pers: <strong>+CHF 175.–</strong> | +3 Pers: <strong>+CHF 240.–</strong>
                         </span>
                       ) : (
                         'Bei 2-Stunden-Shootings auf 1 Person fokussiert (Gruppen ab 4 Stunden buchbar).'
                       )}
                     </p>
                   </div>
-                  {/* Plus/Minus Zähler (1 bis 4 Personen) */}
+                  {/* Plus/Minus Zähler */}
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
@@ -667,14 +685,14 @@ export default function App() {
                 {/* Footer mit Anfrage-Button */}
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#EDD6DC] dark:border-zinc-800">
                   <span className="text-xs italic text-black/60 dark:text-[#B96C80] text-center sm:text-left">
-                    * Unverbindliche Richtpreis-Schätzung inkl. digitaler Bildabgabe & Vorbesprechung.
+                    * Aktionspreise inklusive digitaler Bildabgabe, Vorbesprechung & Vorbereitung.
                   </span>
                   <button
                     type="button"
                     onClick={applyCalcToContact}
                     className="w-full sm:w-auto inline-flex min-h-11 items-center justify-center rounded-lg bg-[#9F3A58] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#882F4A] cursor-pointer shadow-sm dark:bg-zinc-100 dark:text-[#7D2B43] dark:hover:bg-white"
                   >
-                    Auswahl ins Kontaktformular übernehmen →
+                    Aktionspreis im Kontaktformular anfragen →
                   </button>
                 </div>
               </div>
