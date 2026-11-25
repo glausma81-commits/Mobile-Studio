@@ -106,7 +106,7 @@ export default function App() {
     if (hours < 4) setCalcPeople(1);
   };
   const applyCalcToContact = () => {
-    const locName = calcLocation === 'indoor' ? 'Indoorportrait' : 'Outdoor-Portraits';
+    const locName = calcLocation === 'indoor' ? 'Indoor-Portrait' : 'Outdoor-Portraits';
     
     // Automatisch den passenden Bereich für das Kontaktformular setzen
     setContactCategories((prev) => (prev.includes(locName) ? prev : [...prev, locName]));
@@ -125,7 +125,7 @@ export default function App() {
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [contactPeopleCount, setContactPeopleCount] = useState('');
-  const [contactCategories, setContactCategories] = useState<string[]>(['Indoorportrait']);
+  const [contactCategories, setContactCategories] = useState<string[]>(['Indoor-Portrait']);
   const toggleContactCategory = (cat: string) => {
     setContactCategories((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
@@ -228,7 +228,7 @@ export default function App() {
       setContactReferral('');
       setContactMessage('');
       setContactConsent(false);
-      setContactCategories(['Indoorportrait']);
+      setContactCategories(['Indoor-Portrait']);
     } catch {
       setContactFeedback({
         type: 'error',
@@ -718,7 +718,7 @@ export default function App() {
                   Lassen Sie uns über Ihr Projekt sprechen.
                 </h2>
                 <p className="mt-4 text-sm leading-relaxed italic text-black dark:text-[#C77389]">
-                  Ob Indoorportrait, Outdoor-Portrait oder Video-Portrait — schildern Sie mir kurz Ihren Zeitrahmen und Ihre Vorstellungen.
+                  Ob Indoor-Portrait, Outdoor-Portrait oder Video-Portrait — schildern Sie mir kurz Ihren Zeitrahmen und Ihre Vorstellungen.
                 </p>
 
                 <div className="mt-8 space-y-4 border-t border-[#EDD6DC] pt-6 text-sm text-black dark:border-zinc-800 dark:text-[#C77389]">
@@ -809,7 +809,7 @@ export default function App() {
                       </label>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {[
-                          'Indoorportrait',
+                          'Indoor-Portrait',
                           'Outdoor-Portraits',
                           'Editorial-Portrait',
                           'Video-Portrait',
@@ -981,7 +981,7 @@ export default function App() {
           } else if (activeServiceInfo?.number === '03.') {
             setContactCategory('Video-Portrait');
           } else {
-            setContactCategory('Indoorportrait');
+            setContactCategory('Indoor-Portrait');
           }
           handleNavigateSection('kontakt');
         }}
