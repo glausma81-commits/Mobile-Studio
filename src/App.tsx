@@ -193,7 +193,7 @@ const toggleCategory = (cat: string) => {
           email: contactEmail,
           phone: contactPhone,
           peopleCount: contactPeopleCount,
-          category: contactCategory,
+          category: contactCategories.join(', ') || 'Allgemeine Anfrage',
           referral: contactReferral,
           message: contactMessage,
           consent: contactConsent,
