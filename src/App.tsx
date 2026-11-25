@@ -125,7 +125,12 @@ export default function App() {
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [contactPeopleCount, setContactPeopleCount] = useState('');
-  const [contactCategory, setContactCategory] = useState('Indoorportrait');
+  const [contactCategories, setContactCategories] = useState<string[]>(['Indoorportrait']);
+const toggleCategory = (cat: string) => {
+  setContactCategories((prev) =>
+    prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+  );
+};  
   const [contactReferral, setContactReferral] = useState('');
   const [contactMessage, setContactMessage] = useState('');
   const [contactConsent, setContactConsent] = useState(false);
