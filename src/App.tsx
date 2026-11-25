@@ -662,6 +662,8 @@ export default function App() {
                   </button>
                 </div>
               </div>
+              </div>
+          </section>
 
           {/* Contact / Booking Inquiry */}
           <section id="kontakt" className="border-t border-[#EDD6DC] dark:border-zinc-800 mx-auto max-w-[1320px] px-6 py-16 lg:px-10 lg:py-24">
