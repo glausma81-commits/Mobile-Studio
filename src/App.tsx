@@ -12,6 +12,7 @@ import { Navbar } from './components/Navbar';
 import { ProtectedCanvas } from './components/ProtectedCanvas';
 import { ServiceInfoModal } from './components/ServiceInfoModal';
 import { ThemeToggle, type ThemeMode } from './components/ThemeToggle';
+import { translations } from './translations';
 import {
   HERO_IMAGE_URL,
   SERVICES,
@@ -44,6 +45,9 @@ function getInitialTheme(): ThemeMode {
 }
 
 export default function App() {
+ const [lang, setLang] = useState<'de' | 'en'>('de');
+  const t = translations[lang];
+  
   const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
   const [selectedCategory, setSelectedCategory] = useState<PhotoCategory>('Alle');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
