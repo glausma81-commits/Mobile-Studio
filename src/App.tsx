@@ -60,46 +60,62 @@ export default function App() {
 
   const [activeServiceInfo, setActiveServiceInfo] = useState<ServiceItem | null>(null);
 
-  // Preiskalkulator-Zustand & Neues Preismodell
+    // Preiskalkulator-Zustand & Rabatt-Modell
   const [calcLocation, setCalcLocation] = useState<'indoor' | 'outdoor'>('indoor');
-  const [calcDuration, setCalcDuration] = useState<number>(4); // Standard: 4 h
-  const [calcPeople, setCalcPeople] = useState<number>(1); // 1 bis 4 Personen
-  // 1. Grundpreise nach Dauer
-  const DURATION_PRICES: Record<number, number> = {
+  const [calcDuration, setCalcDuration] = useState<number>(4);
+  const [calcPeople, setCalcPeople] = useState<number>(1);
+  // 1. Reguläre Grundpreise
+  const REGULAR_PRICES: Record<number, number> = {
     2: 600,
     4: 800,
     6: 900,
     8: 950,
   };
-  // 2. Degressiver Aufpreis für zusätzliche Personen (1 Person inklusive)
-  // 1. Zusatzperson: +100 CHF | 2. Zusatzperson: +75 CHF | 3. Zusatzperson: +65 CHF
+  // 2. Rabatt-Sätze (2h & 4h: 20% | 6h: 25% | 8h: 26.3157895% = genau 250 CHF)
+  const DISCOUNT_RATES: Record<number, number> = {
+    2: 0.20,
+    4: 0.20,
+    6: 0.25,
+    8: 250 / 950,
+  };
+  const DISCOUNT_LABELS: Record<number, string> = {
+    2: '−20%',
+    4: '−20%',
+    6: '−25%',
+    8: '−26.3%',
+  };
+  // 3. Personenstaffel (+100 / +175 / +240)
   const getExtraPeoplePrice = (people: number, duration: number): number => {
     if (duration < 4 || people <= 1) return 0;
     const additional = people - 1;
     if (additional === 1) return 100;
-    if (additional === 2) return 175; // 100 + 75
-    if (additional === 3) return 240; // 100 + 75 + 65
-    return 240 + (additional - 3) * 60; // falls mehr als 4 Personen
+    if (additional === 2) return 175;
+    if (additional === 3) return 240;
+    return 240 + (additional - 3) * 60;
   };
-  const basePrice = DURATION_PRICES[calcDuration] || 800;
+  const regBasePrice = REGULAR_PRICES[calcDuration] || 800;
+  const discountRate = DISCOUNT_RATES[calcDuration] || 0;
+  const discountAmount = Math.round(regBasePrice * discountRate);
+  const discountedBasePrice = regBasePrice - discountAmount;
   const extraPeoplePrice = getExtraPeoplePrice(calcPeople, calcDuration);
-  const calcTotal = basePrice + extraPeoplePrice;
+  const regularTotal = regBasePrice + extraPeoplePrice;
+  const finalTotal = discountedBasePrice + extraPeoplePrice;
   const additionalPeople = calcDuration >= 4 ? Math.max(0, calcPeople - 1) : 0;
   const handleDurationChange = (hours: number) => {
     setCalcDuration(hours);
-    if (hours < 4) {
-      setCalcPeople(1); // 2h bleibt auf 1 Person fokussiert
-    }
+    if (hours < 4) setCalcPeople(1);
   };
   const applyCalcToContact = () => {
-    const locName = calcLocation === 'indoor' ? 'Indoor-Portraits' : 'Outdoor-Portraits';
-    const detailText = `Paket: ${locName} (${calcDuration} Stunden)\nPersonen: ${calcPeople} Person(en)${
-      additionalPeople > 0 ? ` (inkl. CHF ${extraPeoplePrice}.– für ${additionalPeople} Zusatzperson(en))` : ''
-    }\nGeschätzter Richtpreis: CHF ${calcTotal.toLocaleString('de-CH')}.–`;
-    setContactCategory(calcLocation === 'indoor' ? 'Indoorportrait' : 'Outdoor-Portraits');
+    const locName = calcLocation === 'indoor' ? 'Indoorportrait' : 'Outdoor-Portraits';
+    
+    // Automatisch den passenden Bereich für das Kontaktformular setzen
+    setContactCategories((prev) => (prev.includes(locName) ? prev : [...prev, locName]));
     setContactPeopleCount(String(calcPeople));
+    const detailText = `Paket: ${locName} (${calcDuration} Stunden)\nPersonen: ${calcPeople} Person(en)${
+      additionalPeople > 0 ? ` (inkl. CHF ${extraPeoplePrice}.– für Zusatzpersonen)` : ''
+    }\nRegulärer Preis: CHF ${regularTotal.toLocaleString('de-CH')}.–\nAktions-Rabatt: ${DISCOUNT_LABELS[calcDuration]} (−CHF ${discountAmount}.–)\nAktionspreis: CHF ${finalTotal.toLocaleString('de-CH')}.–`;
     setContactMessage(
-      `Hallo, ich interessiere mich für folgendes Angebot aus dem Preiskalkulator:\n\n${detailText}\n\n`
+      `Hallo, ich interessiere mich für folgendes Aktions-Angebot aus dem Preiskalkulator:\n\n${detailText}\n\n`
     );
     handleNavigateSection('kontakt');
   };
