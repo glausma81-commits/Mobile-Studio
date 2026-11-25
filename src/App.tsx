@@ -798,21 +798,43 @@ const toggleCategory = (cat: string) => {
                   </div>
 
                   <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                    <div>
-                      <label htmlFor="contact-category" className="block text-xs font-medium text-black dark:text-[#D9859B]">
-                        Gewünschter Bereich
+                                        <div>
+                      <label className="block text-xs font-medium text-black dark:text-[#D9859B]">
+                        Gewünschter Bereich (Mehrfachauswahl möglich)
                       </label>
-                      <select
-                        id="contact-category"
-                        value={contactCategory}
-                        onChange={(e) => setContactCategory(e.target.value)}
-                        className="mt-1.5 w-full rounded-lg border border-[#E3C4CC] bg-white px-3.5 py-2.5 text-sm text-black focus:border-[#9F3A58] focus:outline-none focus:ring-2 focus:ring-[#9F3A58]/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-[#D9859B] dark:focus:border-[#D9859B] dark:focus:ring-[#D9859B]/20"
-                      >
-                        <option value="Indoorportrait">Indoorportrait</option>
-                        <option value="Outdoor-Portraits">Outdoor-Portraits</option>
-                        <option value="Editorial-Portrait">Editorial-Portrait</option>
-                        <option value="Video-Portrait">Video-Portrait</option>
-                      </select>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {[
+                          'Indoorportrait',
+                          'Outdoor-Portraits',
+                          'Editorial-Portrait',
+                          'Video-Portrait',
+                        ].map((cat) => {
+                          const isChecked = contactCategories.includes(cat);
+                          return (
+                            <button
+                              type="button"
+                              key={cat}
+                              onClick={() => toggleContactCategory(cat)}
+                              className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all cursor-pointer select-none ${
+                                isChecked
+                                  ? 'border-[#9F3A58] bg-[#F9EEF1] text-black dark:border-[#D9859B] dark:bg-[#9F3A58]/20 dark:text-[#D9859B]'
+                                  : 'border-[#E3C4CC] bg-white text-black/70 hover:border-[#D4A7B3] dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300'
+                              }`}
+                            >
+                              <span
+                                className={`flex h-3.5 w-3.5 items-center justify-center rounded border text-[10px] ${
+                                  isChecked
+                                    ? 'border-[#9F3A58] bg-[#9F3A58] text-white'
+                                    : 'border-zinc-300 dark:border-zinc-600'
+                                }`}
+                              >
+                                {isChecked && '✓'}
+                              </span>
+                              <span>{cat}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     <div>
