@@ -60,37 +60,41 @@ export default function App() {
 
   const [activeServiceInfo, setActiveServiceInfo] = useState<ServiceItem | null>(null);
 
-      // Preiskalkulator-Zustand & Optionen
+  // Preiskalkulator-Zustand & Neues Preismodell
   const [calcLocation, setCalcLocation] = useState<'indoor' | 'outdoor'>('indoor');
-  const [calcDuration, setCalcDuration] = useState<number>(4); // Standard: 4h
-  const [calcPeople, setCalcPeople] = useState<number>(1);
-  // Preisgestaltung (können Sie hier beliebig anpassen)
-  const EXTRA_PERSON_PRICE = 90; // CHF pro weitere Person ab 4h
-  const packagePrices: Record<string, number> = {
-    'indoor-2': 350,
-    'indoor-4': 650,
-    'indoor-8': 1200,
-    'outdoor-4': 690,
-    'outdoor-8': 1290,
+  const [calcDuration, setCalcDuration] = useState<number>(4); // Standard: 4 h
+  const [calcPeople, setCalcPeople] = useState<number>(1); // 1 bis 4 Personen
+  // 1. Grundpreise nach Dauer
+  const DURATION_PRICES: Record<number, number> = {
+    2: 600,
+    4: 800,
+    6: 900,
+    8: 950,
   };
-  const selectedKey = `${calcLocation}-${calcDuration}`;
-  const basePrice = packagePrices[selectedKey] || 650;
-  
-  // Zusatzpreis für weitere Personen (nur ab 4h)
-  const additionalPeople = calcDuration >= 4 ? Math.max(0, calcPeople - 1) : 0;
-  const extraPeoplePrice = additionalPeople * EXTRA_PERSON_PRICE;
+  // 2. Degressiver Aufpreis für zusätzliche Personen (1 Person inklusive)
+  // 1. Zusatzperson: +100 CHF | 2. Zusatzperson: +75 CHF | 3. Zusatzperson: +65 CHF
+  const getExtraPeoplePrice = (people: number, duration: number): number => {
+    if (duration < 4 || people <= 1) return 0;
+    const additional = people - 1;
+    if (additional === 1) return 100;
+    if (additional === 2) return 175; // 100 + 75
+    if (additional === 3) return 240; // 100 + 75 + 65
+    return 240 + (additional - 3) * 60; // falls mehr als 4 Personen
+  };
+  const basePrice = DURATION_PRICES[calcDuration] || 800;
+  const extraPeoplePrice = getExtraPeoplePrice(calcPeople, calcDuration);
   const calcTotal = basePrice + extraPeoplePrice;
-  // Wenn auf 2h gewechselt wird, Personen automatisch auf 1 setzen
+  const additionalPeople = calcDuration >= 4 ? Math.max(0, calcPeople - 1) : 0;
   const handleDurationChange = (hours: number) => {
     setCalcDuration(hours);
     if (hours < 4) {
-      setCalcPeople(1);
+      setCalcPeople(1); // 2h bleibt auf 1 Person fokussiert
     }
   };
   const applyCalcToContact = () => {
     const locName = calcLocation === 'indoor' ? 'Indoor-Portraits' : 'Outdoor-Portraits';
     const detailText = `Paket: ${locName} (${calcDuration} Stunden)\nPersonen: ${calcPeople} Person(en)${
-      additionalPeople > 0 ? ` (inkl. ${additionalPeople} Zusatzperson(en) à CHF ${EXTRA_PERSON_PRICE}.–)` : ''
+      additionalPeople > 0 ? ` (inkl. CHF ${extraPeoplePrice}.– für ${additionalPeople} Zusatzperson(en))` : ''
     }\nGeschätzter Richtpreis: CHF ${calcTotal.toLocaleString('de-CH')}.–`;
     setContactCategory(calcLocation === 'indoor' ? 'Indoorportrait' : 'Outdoor-Portraits');
     setContactPeopleCount(String(calcPeople));
