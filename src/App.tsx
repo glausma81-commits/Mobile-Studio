@@ -228,6 +228,7 @@ export default function App() {
       setContactReferral('');
       setContactMessage('');
       setContactConsent(false);
+      setContactCategories(['Indoorportrait']);
     } catch {
       setContactFeedback({
         type: 'error',
