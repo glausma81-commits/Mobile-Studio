@@ -492,7 +492,7 @@ export default function App() {
                 ))}
               </div>
 
-                            {/* Preiskalkulator Box */}
+              {/* Preiskalkulator Box (Mehrsprachig DE / EN) */}
               <div className="mt-8 rounded-2xl border border-[#EDD6DC] bg-[#FFFDFD] p-7 dark:border-zinc-800 dark:bg-[#1C1C20] shadow-sm">
                 
                 {/* Header mit Rabatt-Anzeige */}
@@ -500,26 +500,26 @@ export default function App() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-semibold tracking-wider uppercase text-[#9F3A58] dark:text-[#D9859B]">
-                        Aktions-Preise
+                        {t.calc.tag}
                       </span>
                       <span className="rounded-full bg-[#9F3A58] px-2 py-0.5 text-[11px] font-bold text-white">
-                        Bis zu {DISCOUNT_LABELS[8]} Rabatt
+                        {t.calc.badge}
                       </span>
                     </div>
                     <h3 className="mt-1 font-display text-2xl font-semibold tracking-tight text-black dark:text-[#D9859B]">
-                      Preiskalkulator
+                      {t.calc.title}
                     </h3>
                     <p className="mt-1 text-xs font-medium italic text-black/80 dark:text-[#B96C80]">
-                      Wählen Sie Location, Dauer und Personen für Ihren vergünstigten Richtpreis.
+                      {t.calc.subtitle}
                     </p>
                   </div>
-                  {/* Richtpreis Anzeige (Normalpreis durchgestrichen + Aktionspreis) */}
+                  {/* Richtpreis Anzeige */}
                   <div className="flex items-center gap-3 rounded-xl border border-[#E3C4CC] bg-[#F9EEF1] px-5 py-3 dark:border-zinc-700 dark:bg-zinc-900">
                     <div className="flex flex-col items-end">
                       <span className="text-[11px] text-zinc-500 line-through">
                         CHF {regularTotal.toLocaleString('de-CH')}.–
                       </span>
-                      <span className="text-xs font-medium text-black/70 dark:text-zinc-400">Aktionspreis:</span>
+                      <span className="text-xs font-medium text-black/70 dark:text-zinc-400">{t.calc.labelAction}</span>
                     </div>
                     <span className="text-2xl font-bold font-display text-[#9F3A58] dark:text-[#D9859B]">
                       CHF {finalTotal.toLocaleString('de-CH')}.–
@@ -532,7 +532,7 @@ export default function App() {
                 {/* 1. Location Umschalter */}
                 <div className="mt-6">
                   <span className="text-xs font-semibold uppercase tracking-wider text-black/70 dark:text-[#B96C80]">
-                    1. Location wählen
+                    {t.calc.step1}
                   </span>
                   <div className="grid grid-cols-2 gap-4 mt-2 max-w-md">
                     <button
@@ -544,7 +544,7 @@ export default function App() {
                           : 'border-[#EDD6DC] bg-white text-black/70 hover:border-[#D4A7B3] dark:border-zinc-800 dark:bg-[#161619] dark:text-zinc-300'
                       }`}
                     >
-                      Studio / Indoor
+                      {t.calc.indoor}
                     </button>
                     <button
                       type="button"
@@ -558,14 +558,14 @@ export default function App() {
                           : 'border-[#EDD6DC] bg-white text-black/70 hover:border-[#D4A7B3] dark:border-zinc-800 dark:bg-[#161619] dark:text-zinc-300'
                       }`}
                     >
-                      Outdoor / On-Location
+                      {t.calc.outdoor}
                     </button>
                   </div>
                 </div>
-                {/* 2. Dauer Auswählen mit durchgestrichenen Preisen */}
+                {/* 2. Dauer Auswählen */}
                 <div className="mt-6">
                   <span className="text-xs font-semibold uppercase tracking-wider text-black/70 dark:text-[#B96C80]">
-                    2. Zeitrahmen wählen
+                    {t.calc.step2}
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
                     {/* 2h Option */}
@@ -580,11 +580,11 @@ export default function App() {
                       >
                         <div>
                           <div className="flex items-center justify-between">
-                            <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">2 Stunden</span>
+                            <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">{t.calc.h2}</span>
                             <span className="text-[11px] px-2 py-0.5 rounded bg-[#9F3A58]/10 text-[#9F3A58] dark:text-[#D9859B] font-bold">−20%</span>
                           </div>
                           <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
-                            Kompaktes Portrait-Shooting (1 Person).
+                            {t.calc.h2Desc}
                           </p>
                         </div>
                         <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800 flex items-baseline gap-2">
@@ -594,8 +594,8 @@ export default function App() {
                       </div>
                     ) : (
                       <div className="p-5 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 flex flex-col justify-center items-center text-center">
-                        <span className="text-xs font-medium text-zinc-400">Outdoor ab 4 h möglich</span>
-                        <p className="text-[11px] text-zinc-400 mt-1">Für optimale Flexibilität bei Licht & Location.</p>
+                        <span className="text-xs font-medium text-zinc-400">{t.calc.outdoorNotice}</span>
+                        <p className="text-[11px] text-zinc-400 mt-1">{t.calc.outdoorNoticeDesc}</p>
                       </div>
                     )}
                     {/* 4h Option */}
@@ -609,11 +609,11 @@ export default function App() {
                     >
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">4 Stunden</span>
+                          <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">{t.calc.h4}</span>
                           <span className="text-[11px] px-2 py-0.5 rounded bg-[#9F3A58]/10 text-[#9F3A58] dark:text-[#D9859B] font-bold">−20%</span>
                         </div>
                         <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
-                          Ausführliche Session mit Outfit- & Set-Wechseln.
+                          {t.calc.h4Desc}
                         </p>
                       </div>
                       <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800 flex items-baseline gap-2">
@@ -632,11 +632,11 @@ export default function App() {
                     >
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">6 Stunden</span>
+                          <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">{t.calc.h6}</span>
                           <span className="text-[11px] px-2 py-0.5 rounded bg-[#9F3A58]/10 text-[#9F3A58] dark:text-[#D9859B] font-bold">−25%</span>
                         </div>
                         <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
-                          Viel Zeit für verschiedene Stile, Looks und Teams.
+                          {t.calc.h6Desc}
                         </p>
                       </div>
                       <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800 flex items-baseline gap-2">
@@ -655,11 +655,11 @@ export default function App() {
                     >
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">8 Stunden</span>
+                          <span className="font-display text-lg font-semibold text-black dark:text-[#D9859B]">{t.calc.h8}</span>
                           <span className="text-[11px] px-2 py-0.5 rounded bg-[#9F3A58]/10 text-[#9F3A58] dark:text-[#D9859B] font-bold">−26.3%</span>
                         </div>
                         <p className="mt-2 text-xs italic text-black/80 dark:text-[#C77389]">
-                          Ganztages-Session mit voller kreativer Freiheit.
+                          {t.calc.h8Desc}
                         </p>
                       </div>
                       <div className="mt-4 pt-3 border-t border-[#EDD6DC]/70 dark:border-zinc-800 flex items-baseline gap-2">
@@ -673,16 +673,10 @@ export default function App() {
                 <div className="mt-8 pt-6 border-t border-[#EDD6DC] dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>
                     <span className="text-xs font-semibold uppercase tracking-wider text-black/70 dark:text-[#B96C80]">
-                      3. Anzahl teilnehmende Personen
+                      {t.calc.step3}
                     </span>
                     <p className="text-xs italic text-black/60 dark:text-[#B96C80] mt-0.5">
-                      {calcDuration >= 4 ? (
-                        <span>
-                          1 Person inkl. | +1 Pers: <strong>+CHF 100.–</strong> | +2 Pers: <strong>+CHF 175.–</strong> | +3 Pers: <strong>+CHF 240.–</strong>
-                        </span>
-                      ) : (
-                        'Bei 2-Stunden-Shootings auf 1 Person fokussiert (Gruppen ab 4 Stunden buchbar).'
-                      )}
+                      {calcDuration >= 4 ? t.calc.peopleNoticeMulti : t.calc.peopleNoticeSingle}
                     </p>
                   </div>
                   {/* Plus/Minus Zähler */}
@@ -697,7 +691,7 @@ export default function App() {
                     </button>
                     <div className="flex flex-col items-center min-w-16">
                       <span className="font-display text-lg font-bold text-black dark:text-[#D9859B]">
-                        {calcPeople} {calcPeople === 1 ? 'Person' : 'Personen'}
+                        {calcPeople} {calcPeople === 1 ? t.calc.personSingle : t.calc.personPlural}
                       </span>
                       {additionalPeople > 0 && (
                         <span className="text-[11px] font-semibold text-[#9F3A58] dark:text-[#D9859B]">
@@ -718,14 +712,14 @@ export default function App() {
                 {/* Footer mit Anfrage-Button */}
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#EDD6DC] dark:border-zinc-800">
                   <span className="text-xs italic text-black/60 dark:text-[#B96C80] text-center sm:text-left">
-                    * Aktionspreise inklusive digitaler Bildabgabe, Vorbesprechung & Vorbereitung.
+                    {t.calc.footnote}
                   </span>
                   <button
                     type="button"
                     onClick={applyCalcToContact}
                     className="w-full sm:w-auto inline-flex min-h-11 items-center justify-center rounded-lg bg-[#9F3A58] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#882F4A] cursor-pointer shadow-sm dark:bg-zinc-100 dark:text-[#7D2B43] dark:hover:bg-white"
                   >
-                    Aktionspreis im Kontaktformular anfragen →
+                    {t.calc.btnApply}
                   </button>
                 </div>
               </div>
