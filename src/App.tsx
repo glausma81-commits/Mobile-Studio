@@ -951,30 +951,7 @@ export default function App() {
             <span aria-hidden="true">·</span>
             <span className="italic">Alle gezeigten Werke sind urheberrechtlich geschützt.</span>
           </div>
-
           <div className="flex flex-wrap items-center gap-5">
-            <button
-              type="button"
-              onClick={() => handleNavigateSection('galerie')}
-              className="text-black hover:text-black/70 dark:text-[#C77389] dark:hover:text-[#E59DB0] cursor-pointer"
-            >
-              Galerie
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavigateSection('leistungen')}
-              className="text-black hover:text-black/70 dark:text-[#C77389] dark:hover:text-[#E59DB0] cursor-pointer"
-            >
-              Leistungen
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavigateSection('kontakt')}
-              className="font-medium text-black hover:text-black/70 dark:text-[#D9859B] dark:hover:text-[#E59DB0] cursor-pointer"
-            >
-              Kontakt
-            </button>
-             <div className="flex flex-wrap items-center gap-5">
             <button
               type="button"
               onClick={() => handleNavigateSection('galerie')}
@@ -996,7 +973,7 @@ export default function App() {
             >
               {lang === 'de' ? 'Kontakt' : 'Contact'}
             </button>
-            {/* Sprach-Schalter */}
+            {/* Sprach-Schalter DE | EN */}
             <button
               type="button"
               onClick={() => setLang(lang === 'de' ? 'en' : 'de')}
