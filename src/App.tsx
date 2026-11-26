@@ -259,7 +259,7 @@ export default function App() {
                     </p>
                     <div className="flex flex-wrap items-center justify-between gap-4">
                     <p className="text-xs font-medium tracking-wide text-black dark:text-[#B96C80]">
-                      
+                    Portraitfotografie &amp; Video-Portraits · Zug, Zürich &amp; ganze Schweiz  
                     </p>
 
                    
